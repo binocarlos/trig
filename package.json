@@ -22,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/binocarlos/trig/issues"
   },
-  "homepage": "https://github.com/binocarlos/trig"
+  "homepage": "https://github.com/binocarlos/trig",
+  "devDependencies": {
+    "tape": "^2.13.4"
+  },
+  "dependencies": {
+    "cli-path-resolve": "0.0.2"
+  }
 }
