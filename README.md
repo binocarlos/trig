@@ -126,6 +126,10 @@ The docker way:
 $(docker run --rm -t -i -v /myapp:/myapp -v /user/overrides:/user/overrides binocarlos/trig /myapp/defaults.yaml /user/overrides/triggers.yaml run $@)
 ```
 
+## notes
+
+ * running a piped command in another folder [Stack Overflow](http://stackoverflow.com/questions/9394896/can-i-pipe-between-commands-and-run-the-programs-from-different-directories)
+
 ## license
 
 MIT
