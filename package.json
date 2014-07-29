@@ -27,6 +27,7 @@
     "tape": "^2.13.4"
   },
   "dependencies": {
-    "cli-path-resolve": "0.0.2"
+    "cli-path-resolve": "0.0.2",
+    "js-yaml": "^3.1.0"
   }
 }

@@ -1,0 +1,4 @@
+{
+	"info": "echo \"this is the info\"",
+	"list": "./myscript.sh $@"
+}

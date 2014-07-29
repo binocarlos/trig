@@ -1,7 +1,24 @@
 var tape = require('tape')
 var cp = require('child_process')
 var path = require('path')
+var loadtrigger = require('./loadtrigger')
 
+tape('load a config yaml', function(t){
+	var triggers = loadtrigger(path.join(__dirname, 'test', 'default.yaml'))
+	t.equal(triggers.info, 'echo "this is the info"', 'info equal')
+	t.equal(triggers.list, './myscript.sh $@', 'list equal')
+	t.end()
+})
+
+tape('load a json yaml', function(t){
+	var triggers = loadtrigger(path.join(__dirname, 'test', 'default.json'))
+	t.equal(triggers.info, 'echo "this is the info"', 'info equal')
+	t.equal(triggers.list, './myscript.sh $@', 'list equal')
+	t.end()
+})
+
+
+/*
 function runTrig(t, command, done){
 	command = 'node index.js ' + command
 	cp.exec(command, function(err, stdout, stderr){
@@ -25,3 +42,4 @@ tape('get a command from an overriden pipe', function(t){
 		t.end()
 	})
 })
+*/
