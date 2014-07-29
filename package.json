@@ -1,0 +1,26 @@
+{
+  "name": "trig",
+  "version": "0.0.0",
+  "description": "Compose streaming command line actions from a config folder",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binocarlos/trig.git"
+  },
+  "keywords": [
+    "trigger",
+    "script",
+    "command",
+    "line",
+    "compose"
+  ],
+  "author": "Kai Davenport",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/binocarlos/trig/issues"
+  },
+  "homepage": "https://github.com/binocarlos/trig"
+}
