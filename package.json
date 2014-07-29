@@ -1,7 +1,7 @@
 {
   "name": "trig",
   "version": "0.0.0",
-  "description": "Compose streaming command line actions from a config folder",
+  "description": "Compose command line applications from procfiles",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"

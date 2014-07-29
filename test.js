@@ -17,10 +17,10 @@ tape('load a json yaml', function(t){
 	t.end()
 })
 
-
-/*
 function runTrig(t, command, done){
 	command = 'node index.js ' + command
+	console.log('running')
+	console.log(command)
 	cp.exec(command, function(err, stdout, stderr){
 		if(err || stderr){
 			t.fail(err || stderr.toString(), 'run command')
@@ -42,4 +42,3 @@ tape('get a command from an overriden pipe', function(t){
 		t.end()
 	})
 })
-*/

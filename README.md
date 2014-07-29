@@ -1,12 +1,12 @@
 ## trig
 
-a library for composing command line applications from smaller, docker based commands
-
-This is useful if you want to override the default behaviour of a PaaS or generally control and override the behaviour of a cli application.
+Compose command line applications from procfiles
 
 ## trigger files
 
-you define your program with a default set of actions, these actions, like user overrides are defined in a yaml file like so:
+you define your program with as a default set of triggers.
+
+triggers are defined in a Procfile:
 
 ```yaml
 info: echo "this is the info"
@@ -14,59 +14,59 @@ list: ./myscript.sh $@
 backup: docker run --tm -it binocarlos/backup $@
 ```
 
-save this file as `~/myprog/defaults.yaml`
-
-It references ./myscript.sh - this should be placed in the same folder as the defaults.yaml
+Notice the `list` trigger references ./myscript.sh - this script should be placed in the same folder as the Procfile
 
 ## running triggers
 
-The following command would run the info step of our program:
+If the path to our Procfile is `~/triggers/defaults` then the following command would print the command for the info step of our program:
 
 ```bash
-$ trig ~/myprog/defaults.yaml run info
+$ trig ~/myprog/defaults run info
 ```
 
-If we ran this command - it would output `this is the info`
+If we ran this command - it would output `this is the info` because the choosen trigger was executed.
 
-You can pass arguments to the trigger - these are injected into the $@ variables in .yaml file
+Command line arguments are transferred into the trigger (as $@)
 
 The following command runs the docker backup job poassing some arguments:
 
 ```bash
-$ trig ~/myprog/defaults.yaml run backup --folder /tmp --source http://127.0.0.1:95858
+$ trig ~/myprog/defaults run backup --folder /tmp --source http://127.0.0.1:95858
 ```
 
 ## overrides
 
-To allow the user customisation of the triggers - you can run multiple .yaml files against a trigger.
+To allow the user customisation of the triggers - you can merge multiple Procfiles
 
-The ordering of the .yaml files defines what command is actually run - the later in the order the more priority.
+The ordering of the Procfiles determines the priority for the overwrites.
 
-For example - if we create an override file:
+For example - if we create an override file and save this in `~/myoverrides/defaults`:
 
 ```yaml
 info: echo "apples is the info!"
 ```
 
-And save this in `~/myoverrides/defaults.yaml`
-
-Then we can run the info trigger against the 2 yamls:
+If we ran trig against our defaults and overrides - the override would win:
 
 ```bash
-$ trig ~/myprog/defaults.yaml ~/myoverrides/defaults.yaml run info
+$ trig ~/myprog/defaults ~/myprog/overrides run info
 ```
 
-If we ran this command - it would output `apples is the info!`
+If we ran this command - it would print 
+
+```bash
+echo "apples is the info!"
+```
 
 ## piping
 
-A trigger itself can use a pipe in a single command (upper-case-first is a script that converts input to camel case and prints it):
+A trigger itself can use a pipe within a single command:
 
 ```yaml
-info: echo "this is the info" | upper-case-first
+info: echo "this is the info" | upper-case
 ```
 
-Where it gets interesting is to put a pipe symbol at either end of a trigger command - this appends/prepends the next/last command.
+You can also use the `|` pipe symbol to concatenante commands in overidden Procfiles:
 
 Changing our overrides file:
 
@@ -74,57 +74,87 @@ Changing our overrides file:
 info: | upper-case-first
 ```
 
-If we then ran the info trigger against both files again:
+If we ran the info step again - it would print:
 
 ```bash
-$ trig ~/myprog/defaults.yaml ~/myoverrides/triggers.yaml run info
+echo "apples is the info!" | upper-case-first
 ```
 
-If we ran this command - we would get `This Is The Info` - that is the original output but piped through the override.
+Putting the `|` pipe symbol at the end means concatenante with the next command.
 
 ## trigger execution context
 
-Triggers are 'eval'ed on the command line of the invoking program and so have access to environment variables
+Triggers are 'eval'ed on the command line of the invoking shell and so have access to environment variables
 
-Triggers are run with a `pwd` of the folder the .yaml file resides - this means triggers can execute scripts from within the same folder
+Triggers are run with a `pwd` of the folder the Procfile file resides - this means triggers can execute scripts as their commands:
+
+```yaml
+list: ./myscript.sh $@
+```
+
+This is the same as:
+
+```yaml
+list: myscript.sh $@
+```
+
+## docker
+
+If you have docker installed then it can be used to run a trigger step.
+
+Remember to use the --rm, -t and -i flags so the docker job removes itself after and plays nicely with streams:
+
+```yaml
+list: docker run --rm -t -i binocarlos/myjob $@
+```
 
 ## command line variables
 
-triggers can also access the command line arguments of the invoking command by using the $@ symbol:
+triggers have access to the command line passed to the original command via `$@`
 
 ```yaml
 info: echo $@
 ```
 
-Just print the command line options back again:
+Which would just print the command line options back again:
 
 ```bash
-$ trig ~/myprog/defaults.yaml run info hello
+$ trig ~/myprog/defaults run info hello -a 10
 ```
 
-would print `hello`
+would print `hello -a 10`
 
 ## multiple scripts
 
-If you want multiple scripts to run for a single trigger then you can either write a script that run the multiple parts or put the extra scripts in the pipe
+To have multiple triggers for a single command you can pipe them inside a single Procfile:
+
+```yaml
+info: proga | progb | progc | progd
+```
+
+Each step should play nice with stdin/stdout and stderr
 
 ## aliasing
 
-It is simple to alias trig to the name of your program pre-configured with defaults and overrides.
+It is useful to alias the name of your program to the trig command that runs your steps.
 
-The non-docker way:
+### non docker way
 
 ```bash
 #!/bin/bash
-$(trig /myapp/defaults.yaml /user/overrides/triggers.yaml run $@)
+$(trig /myapp/defaults /user/overrides run $@)
 ```
 
-The docker way:
+#### docker way
+
+this means you don't need to install trig:
 
 ```bash
 #!/bin/bash
 $(docker run --rm -t -i -v /myapp:/myapp -v /user/overrides:/user/overrides binocarlos/trig /myapp/defaults.yaml /user/overrides/triggers.yaml run $@)
 ```
+
+Create this script and then copy it to `/usr/local/bin/<yourscript>`
 
 ## notes
 

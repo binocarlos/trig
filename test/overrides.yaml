@@ -1,1 +1,1 @@
-info: | upper-case
+info: "| upper-case \"hello\""

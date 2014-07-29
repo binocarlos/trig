@@ -20,7 +20,7 @@ var parsers = {
 	}
 }
 
-module.exports = function(path, done){
+module.exports = function(path){
 	if(!fs.existsSync(path)){
 		return {}
 	}

@@ -1,5 +1,6 @@
 var args = process.argv.splice(2)
 var resolve = require('cli-path-resolve')
+var loadtriggers = require('./triggers')
 
 var triggerFiles = []
 
@@ -35,9 +36,8 @@ if(triggerFiles.length<=0){
 
 args = args.splice(triggerFiles.length)
 
-console.log('-------------------------------------------');
-console.log('trigger')
-console.dir(triggerFiles)
+var triggers = loadtriggers(triggerFiles.map(resolve))
+
 console.log('-------------------------------------------');
 console.log('args')
 console.dir(args)
