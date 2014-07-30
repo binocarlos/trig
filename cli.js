@@ -1,16 +1,8 @@
 var args = process.argv.splice(2)
 var resolve = require('cli-path-resolve')
-var loadtriggers = require('./triggers')
+var commands = require('./index.js')
 
 var triggerFiles = []
-
-function commandRun(trigger, args){
-
-}
-
-var commands = {
-	run:commandRun
-}
 
 var found = null
 args.forEach(function(arg){
@@ -36,9 +28,9 @@ if(triggerFiles.length<=0){
 
 args = args.splice(triggerFiles.length)
 
-var triggers = loadtriggers(triggerFiles.map(resolve))
+var runCommand = args.shift()
+var triggerName = args.shift()
 
-console.dir(triggers)
-console.log('-------------------------------------------');
-console.log('args')
-console.dir(args)
+var command = commands[found](triggerFiles.map(resolve), runCommand, triggerName)
+
+console.log(command)

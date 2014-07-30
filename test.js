@@ -4,7 +4,7 @@ var path = require('path')
 var triggers = require('./triggers')
 
 function runTrig(t, command, done){
-	command = 'node index.js ' + command
+	command = 'node cli.js ' + command
 	console.log('running')
 	console.log(command)
 	cp.exec(command, function(err, stdout, stderr){
