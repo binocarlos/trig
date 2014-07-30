@@ -3,9 +3,12 @@ var loadtriggers = require('./triggers')
 module.exports = {
 	run:function(files, trigger, args){
 		var triggers = loadtriggers(files)
+		var argsString = args.join(' ')
 
-		console.log('-------------------------------------------');
-		console.dir(triggers)
-		return''
+		var command = triggers[trigger]
+
+		command = (command || '').replace(/\$\@/g, argsString)
+
+		return command
 	}
 }
