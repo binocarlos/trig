@@ -42,8 +42,23 @@ tape('run a command via the alias', function(t){
 			return
 		}
 		var result = stdout.toString().replace(/\n$/, '')
-
 		t.equal(result, 'THIS IS THE INFO', 'output of alias')
+		t.end()
+	})
+	
+})
+
+
+tape('pipe via the alias', function(t){
+
+	cp.exec('echo "hello world" | ./alias.sh piped', function(err, stdout, stderr){
+		if(err || stderr){
+			t.fail(err || stderr.toString(), 'run piped alias')
+			t.end()
+			return
+		}
+		var result = stdout.toString().replace(/\n$/, '')
+		t.equal(result, 'HELLO WORLD', 'output of piped alias')
 		t.end()
 	})
 	
