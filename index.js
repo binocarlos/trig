@@ -38,6 +38,7 @@ args = args.splice(triggerFiles.length)
 
 var triggers = loadtriggers(triggerFiles.map(resolve))
 
+console.dir(triggers)
 console.log('-------------------------------------------');
 console.log('args')
 console.dir(args)
