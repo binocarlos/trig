@@ -21,8 +21,13 @@ tape('get a command from an overriden pipe', function(t){
 
 	var command = [defaultTriggers, overrideTriggers, 'plan', 'info']
 	runTrig(t, command.join(' '), function(err, command){
-		console.log('-------------------------------------------');
-		console.log(command)
+		if(err){
+			t.fail(err, 'load command')
+			t.end()
+			return
+		}
+		command = command.replace(/\n$/, '')
+		t.equal(command, '(cd /srv/projects/trig/test; echo "this is the info") | (cd /srv/projects/trig/test;  ./upper-case)', 'command is generated')
 		t.end()
 	})
 })
