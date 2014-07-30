@@ -174,6 +174,35 @@ $(docker run --rm -t -i -v /myapp:/myapp -v /user/overrides:/user/overrides bino
 
 Create this script and then copy it to `/usr/local/bin/<yourscript>`
 
+## api
+
+You can use trig as a command line script or you can use it from within your node program.
+
+cli:
+
+```bash
+usage: trig files... command stepname [options]
+
+commands:
+
+  run - print the full command for a step
+
+```
+
+From your node.js program:
+
+#### `trig.run(files, stepname)
+
+Merge the files array into a single procfile and concatentate the piped commands.
+
+Then print the command for `stepname`
+
+```js
+var trig = require('trig')
+
+var command = trig.run(files, 'info')
+```
+
 ## notes
 
  * running a piped command in another folder [Stack Overflow](http://stackoverflow.com/questions/9394896/can-i-pipe-between-commands-and-run-the-programs-from-different-directories)

@@ -6,6 +6,9 @@
   "scripts": {
     "test": "node test.js"
   },
+  "bin": {
+    "trig": "./cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/binocarlos/trig.git"
