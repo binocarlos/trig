@@ -1,2 +1,3 @@
 info: | ./upper-case
 piped: | ./upper-case
+doublepipe: | ./upper-case
