@@ -45,7 +45,7 @@ tape('remove double pipes', function(t){
 			return
 		}
 		command = command.replace(/\n$/, '')
-		t.equal(command, '(cd /srv/projects/trig/test; echo "this is the info") | (cd /srv/projects/trig/test;  ./upper-case)', 'command is generated')
+		t.equal(command, '(cd /srv/projects/trig/test; echo "hello") | (cd /srv/projects/trig/test;  ./upper-case)', 'command is generated')
 		t.end()
 	})
 })

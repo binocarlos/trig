@@ -7,6 +7,7 @@ function getCommand(files, trigger, args){
 	var command = triggers[trigger]
 
 	command = (command || '').replace(/\$\@/g, argsString)
+	command = (command || '').replace(/\|\s*\|/g, '|')
 
 	return command
 }

@@ -21,6 +21,8 @@ function processTriggers(filepath, triggers){
 			return ''
 		})
 
+		trigger = trigger.replace(/\s*$/, '')
+
 		triggers[key] = startPipe + '(cd ' + folder + '; ' + trigger + ')' + endPipe
 	})
 	return triggers
