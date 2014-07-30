@@ -1,10 +1,25 @@
-var loadTrigger = require('./loadtrigger')
+var parse = require('parse-procfile')
+var merge = require('merge-concat')
+var fs = require('fs')
+
 module.exports = function(files){
 
-	console.log('-------------------------------------------');
-	console.dir(files)
-	var data = files.map(loadTrigger)
-	console.log('-------------------------------------------');
-	console.dir(data)
-	return {}
+	var data = files.map(function(file){
+		if(!fs.existsSync(file)){
+			throw new Error(file + ' does not exist')
+		}
+		var content = fs.readFileSync(file, 'utf8')
+		return parse(content)
+	})
+
+	var flat = merge(data, function(prev, next, field){
+		if(prev.match(/\|\s*$/) || next.match(/^\s*\|/)){
+			return prev + next
+		}
+		else{
+			return next
+		}
+	})
+
+	return flat
 }
