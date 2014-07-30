@@ -187,8 +187,10 @@ If you have docker on your system:
 
 ```bash
 #!/bin/bash
-$(docker run --rm -t -i -v /myapp:/myapp -v /user/overrides:/user/overrides binocarlos/trig /myapp/defaults /user/overrides/triggers run $@)
+$(docker run --rm -v /myapp:/myapp -v /user/overrides:/user/overrides binocarlos/trig /myapp/defaults /user/overrides/triggers run $@)
 ```
+
+NOTE - you must use absolute paths when using the docker syntax - also the volumes must be mounted with the same paths in both host and container.
 
 #### running aliases
 
