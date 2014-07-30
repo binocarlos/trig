@@ -31,3 +31,20 @@ tape('get a command from an overriden pipe', function(t){
 		t.end()
 	})
 })
+
+
+tape('run a command via the alias', function(t){
+
+	cp.exec('./alias.sh info', function(err, stdout, stderr){
+		if(err || stderr){
+			t.fail(err || stderr.toString(), 'run alias')
+			t.end()
+			return
+		}
+		var result = stdout.toString().replace(/\n$/, '')
+
+		t.equal(result, 'THIS IS THE INFO', 'output of alias')
+		t.end()
+	})
+	
+})
