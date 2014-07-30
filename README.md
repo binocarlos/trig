@@ -92,10 +92,28 @@ Triggers are run with a `pwd` of the folder the Procfile file resides - this mea
 list: ./myscript.sh $@
 ```
 
-This is the same as:
+This will be expanded to:
 
 ```yaml
-list: myscript.sh $@
+list: (cd /the/folder; myscript.sh $@)
+```
+
+Each step in a piped command will have the same transformation applied - this lets scripts from different folders be run in the same command:
+
+~/default/triggers:
+```yaml
+list: echo "hello"
+```
+
+~/custom/triggers:
+```yaml
+list: | upper-case
+```
+
+If we combined ~/default/triggers with ~/custom/triggers we would get:
+
+```yaml
+list: (cd ~/default/triggers; echo "hello") | (cd ~/custom/triggers; upper-case)
 ```
 
 ## docker

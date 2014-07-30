@@ -13,10 +13,6 @@ module.exports = function(files){
 	})
 
 	var flat = merge(data, function(prev, next, field){
-		console.log('-------------------------------------------');
-		console.log('-------------------------------------------');
-		console.dir(prev)
-		console.dir(next)
 		if(prev.match(/\|\s*$/) || next.match(/^\s*\|/)){
 			return prev + ' ' + next
 		}
