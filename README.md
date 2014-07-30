@@ -8,7 +8,7 @@ you define your program with as a default set of triggers.
 
 triggers are defined in a Procfile:
 
-```yaml
+```
 info: echo "this is the info"
 list: ./myscript.sh $@
 backup: docker run --tm -it binocarlos/backup $@
@@ -42,7 +42,7 @@ The ordering of the Procfiles determines the priority for the overwrites.
 
 For example - if we create an override file and save this in `~/myoverrides/defaults`:
 
-```yaml
+```
 info: echo "apples is the info!"
 ```
 
@@ -62,7 +62,7 @@ echo "apples is the info!"
 
 A trigger itself can use a pipe within a single command:
 
-```yaml
+```
 info: echo "this is the info" | upper-case
 ```
 
@@ -70,7 +70,7 @@ You can also use the `|` pipe symbol to concatenante commands in overidden Procf
 
 Changing our overrides file:
 
-```yaml
+```
 info: | upper-case-first
 ```
 
@@ -88,31 +88,31 @@ Triggers are 'eval'ed on the command line of the invoking shell and so have acce
 
 Triggers are run with a `pwd` of the folder the Procfile file resides - this means triggers can execute scripts as their commands:
 
-```yaml
+```
 list: ./myscript.sh $@
 ```
 
 This will be expanded to:
 
-```yaml
+```
 list: (cd /the/folder; myscript.sh $@)
 ```
 
 Each step in a piped command will have the same transformation applied - this lets scripts from different folders be run in the same command:
 
 ~/default/triggers:
-```yaml
+```
 list: echo "hello"
 ```
 
 ~/custom/triggers:
-```yaml
+```
 list: | upper-case
 ```
 
 If we combined ~/default/triggers with ~/custom/triggers we would get:
 
-```yaml
+```
 list: (cd ~/default/triggers; echo "hello") | (cd ~/custom/triggers; upper-case)
 ```
 
@@ -122,7 +122,7 @@ If you have docker installed then it can be used to run a trigger step.
 
 Remember to use the --rm, -t and -i flags so the docker job removes itself after and plays nicely with streams:
 
-```yaml
+```
 list: docker run --rm -t -i binocarlos/myjob $@
 ```
 
@@ -130,7 +130,7 @@ list: docker run --rm -t -i binocarlos/myjob $@
 
 triggers have access to the command line passed to the original command via `$@`
 
-```yaml
+```
 info: echo $@
 ```
 
@@ -146,7 +146,7 @@ would print `hello -a 10`
 
 To have multiple triggers for a single command you can pipe them inside a single Procfile:
 
-```yaml
+```
 info: proga | progb | progc | progd
 ```
 
