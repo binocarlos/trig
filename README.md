@@ -21,17 +21,17 @@ Notice the `list` trigger references ./myscript.sh - this script should be place
 If the path to our Procfile is `~/triggers/defaults` then the following command would print the command for the info step of our program:
 
 ```bash
-$ trig ~/myprog/defaults run info
+$ trig ~/myprog/defaults plan info
 ```
 
-If we ran this command - it would output `this is the info` because the choosen trigger was executed.
+If we ran the command that is printed - it would output `this is the info` because the choosen trigger was executed.
 
 Command line arguments are transferred into the trigger (as $@)
 
 The following command runs the docker backup job poassing some arguments:
 
 ```bash
-$ trig ~/myprog/defaults run backup --folder /tmp --source http://127.0.0.1:95858
+$ trig ~/myprog/defaults plan backup --folder /tmp --source http://127.0.0.1:95858
 ```
 
 ## overrides
@@ -49,7 +49,7 @@ info: echo "apples is the info!"
 If we ran trig against our defaults and overrides - the override would win:
 
 ```bash
-$ trig ~/myprog/defaults ~/myprog/overrides run info
+$ trig ~/myprog/defaults ~/myprog/overrides plan info
 ```
 
 If we ran this command - it would print 
@@ -137,7 +137,7 @@ info: echo $@
 Which would just print the command line options back again:
 
 ```bash
-$ trig ~/myprog/defaults run info hello -a 10
+$ trig ~/myprog/defaults plan info hello -a 10
 ```
 
 would print `hello -a 10`
@@ -152,29 +152,7 @@ info: proga | progb | progc | progd
 
 Each step should play nice with stdin/stdout and stderr
 
-## aliasing
-
-It is useful to alias the name of your program to the trig command that runs your steps.
-
-### non docker way
-
-```bash
-#!/bin/bash
-$(trig /myapp/defaults /user/overrides run $@)
-```
-
-#### docker way
-
-this means you don't need to install trig:
-
-```bash
-#!/bin/bash
-$(docker run --rm -t -i -v /myapp:/myapp -v /user/overrides:/user/overrides binocarlos/trig /myapp/defaults.yaml /user/overrides/triggers.yaml run $@)
-```
-
-Create this script and then copy it to `/usr/local/bin/<yourscript>`
-
-## api
+## cli
 
 You can use trig as a command line script or you can use it from within your node program.
 
@@ -185,22 +163,73 @@ usage: trig files... command stepname [options]
 
 commands:
 
-  run - print the full command for a step
+	plan - print the full command for a step 
+  run - echo 'eval ' + the output of plan
 
 ```
 
-From your node.js program:
+## aliasing
 
-#### `trig.run(files, stepname)
+It is useful to alias the name of your program to the trig command that runs your steps.
 
-Merge the files array into a single procfile and concatentate the piped commands.
+### non docker way
 
-Then print the command for `stepname`
+If you have done `npm install trig -g`:
+
+```bash
+#!/bin/bash
+$(trig /myapp/defaults /user/overrides run $@)
+```
+
+#### docker way
+
+If you have docker on your system:
+
+```bash
+#!/bin/bash
+$(docker run --rm -t -i -v /myapp:/myapp -v /user/overrides:/user/overrides binocarlos/trig /myapp/defaults /user/overrides/triggers run $@)
+```
+
+#### running aliases
+
+Create either of these scripts and then copy it to `/usr/local/bin/<yourscript>`
+
+Once you have setup this alias you can run it as follows:
+
+Imagine we named our alias script `myprog` and it resides in `/usr/local/bin`
+
+```bash
+$ myprog info apples
+```
+
+This would expand into running:
+
+```
+$ $(trig /myapp/defaults /user/overrides run info apples)
+```
+
+Which would eval the commands returned - modular cli!
+
+## node api
+
+You can generate trig commands from within your node.js program also:
+
+#### `trig.plan(files, stepname, args)
+
+Files is an array of Procfile paths.
+
+Stepname is the command you want to generate.
+
+Args is the remaining array of command line options (after the stepname).
 
 ```js
 var trig = require('trig')
 
-var command = trig.run(files, 'info')
+// get the raw command
+var command = trig.plan(files, 'info', args)
+
+// get the command prepended with eval
+var command = trig.run(files, 'info', args)
 ```
 
 ## notes

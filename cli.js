@@ -31,6 +31,6 @@ args = args.splice(triggerFiles.length)
 var runCommand = args.shift()
 var triggerName = args.shift()
 
-var command = commands[found](triggerFiles.map(resolve), runCommand, triggerName)
+var command = commands[runCommand](triggerFiles.map(resolve), triggerName, args)
 
 console.log(command)
