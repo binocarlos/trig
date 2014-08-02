@@ -51,6 +51,24 @@ tape('remove double pipes', function(t){
 })
 
 
+tape('reverse pipes', function(t){
+	var defaultTriggers = 'test/defaults'
+	var overrideTriggers = 'test/overrides'
+
+	var command = [defaultTriggers, overrideTriggers, 'plan', 'doublepipe']
+	runTrig(t, command.join(' '), function(err, command){
+		if(err){
+			t.fail(err, 'load command')
+			t.end()
+			return
+		}
+		command = command.replace(/\n$/, '')
+		t.equal(command, '(cd /srv/projects/trig/test; ./upper-case) | (cd /srv/projects/trig/test; echo "hello")', 'command is generated')
+		t.end()
+	})
+})
+
+
 tape('run a command via the alias', function(t){
 
 	cp.exec('./alias.sh info', function(err, stdout, stderr){

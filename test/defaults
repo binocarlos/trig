@@ -2,3 +2,4 @@ info: echo "this is the info"
 list: ./myscript.sh $@
 piped: ./mypipe.sh
 doublepipe: echo "hello" |
+reversed: echo "hello"

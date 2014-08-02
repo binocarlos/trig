@@ -82,6 +82,44 @@ echo "apples is the info!" | upper-case-first
 
 Putting the `|` pipe symbol at the end means concatenante with the next command.
 
+## normal pipe order
+
+Where you place the pipe is important - the normal mode is for the later override to appear after the original.
+
+For example our original command:
+
+```
+test: echo "hello"
+```
+
+And our override:
+
+```
+test: | upper-case-first
+```
+
+Would result in:
+
+```
+echo "hello" | upper-case-first
+```
+
+## reverse pipe order
+
+You can reverse the normal ordering of triggers by placing a pipe at the end of an override:
+
+```bash
+test: upper-case-first |
+```
+
+Which would result in:
+
+```
+echo upper-case-first | "hello"
+```
+
+Which kind of dosn't make sense above but means you have control over the pipe order going against the ordering of trigger files.
+
 ## trigger execution context
 
 Triggers are 'eval'ed on the command line of the invoking shell and so have access to environment variables
