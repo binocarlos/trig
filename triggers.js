@@ -42,8 +42,11 @@ module.exports = function(files){
 	})
 
 	var flat = merge(data, function(prev, next, field){
-		if(prev.match(/\|\s*$/) || next.match(/^\s*\|/)){
+		if(next.match(/^\|\s*/)){
 			return prev + ' ' + next
+		}
+		else if(next.match(/\|\s*$/)){
+			return next + ' ' + prev
 		}
 		else{
 			return next

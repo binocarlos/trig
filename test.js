@@ -50,12 +50,11 @@ tape('remove double pipes', function(t){
 	})
 })
 
-
 tape('reverse pipes', function(t){
 	var defaultTriggers = 'test/defaults'
 	var overrideTriggers = 'test/overrides'
 
-	var command = [defaultTriggers, overrideTriggers, 'plan', 'doublepipe']
+	var command = [defaultTriggers, overrideTriggers, 'plan', 'reversed']
 	runTrig(t, command.join(' '), function(err, command){
 		if(err){
 			t.fail(err, 'load command')
@@ -67,7 +66,6 @@ tape('reverse pipes', function(t){
 		t.end()
 	})
 })
-
 
 tape('run a command via the alias', function(t){
 
