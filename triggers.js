@@ -34,6 +34,9 @@ module.exports = function(files){
 		if(!fs.existsSync(file)){
 			throw new Error(file + ' does not exist')
 		}
+		if(fs.statSync(file).isDirectory()){
+			throw new Error(file + ' is a directory')	
+		}
 		var content = fs.readFileSync(file, 'utf8')
 		return processTriggers(file, parse(content))
 	})
